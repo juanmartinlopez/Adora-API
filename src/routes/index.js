@@ -12,6 +12,10 @@ const provincialLawRouter = require("./provincialLawRouter");
 const associationRouter = require("./associationRouter");
 const adminRouter = require("./adminRoutes");
 
+router.get("/", (req, res) => {
+    res.send("¡Bienvenido a la API de Docentes del Reino!");
+});
+
 //* Route *//
 router.use("/activity", activityRouter)
 router.use("/prayerday", prayerDayRouter);
