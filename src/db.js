@@ -8,13 +8,15 @@ const {
    POSTGRES_HOST,
    POSTGRES_PORT,
    DATABASE_NAME,
+   DB_DEPLOY,
    NODE_ENV, // Verifica si estás en producción
 } = process.env;
 
 const isProduction = NODE_ENV === 'production';
 
 const sequelize = new Sequelize(
-   `postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}`,
+   // `postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${DATABASE_NAME}`,
+   DB_DEPLOY,
    {
       logging: false, // set to console.log to see the raw SQL queries
       native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -22,9 +24,9 @@ const sequelize = new Sequelize(
       dialectOptions: {
          ssl: isProduction
             ? {
-                 require: true, // Habilita SSL
-                 rejectUnauthorized: false, // Ignora el certificado no autorizado
-              }
+               require: true, // Habilita SSL
+               rejectUnauthorized: false, // Ignora el certificado no autorizado
+            }
             : false, // No usar SSL en desarrollo
       },
    }

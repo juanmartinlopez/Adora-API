@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { HASHWORD } = process.env; // Variable de entorno para agregar a la contraseña
+const { HASHWORD, SALTROUNDS } = process.env; // Variable de entorno para agregar a la contraseña
 
 // Función para hashear la contraseña
 const hash = async (password) => {
@@ -7,8 +7,7 @@ const hash = async (password) => {
     if (HASHWORD) {
         password = password + HASHWORD;
     }
-    const saltRounds = 15;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, SALTROUNDS);
     return hashedPassword;
 }
 
