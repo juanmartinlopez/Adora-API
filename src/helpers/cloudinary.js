@@ -1,54 +1,27 @@
-// src/middleware/cloudinary.js
 const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
 require("dotenv").config();
 
-const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
-
-// Configurar Cloudinary
 cloudinary.config({
-  cloud_name: CLOUDINARY_CLOUD_NAME,
-  api_key: CLOUDINARY_API_KEY,
-  api_secret: CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Obtener URL de una imagen
-const getImage = async (id) => {
-  try {
-    if (!id) throw new Error("No se proporcionó un ID de imagen");
-    const image = await cloudinary.api.resource(id);
-    return image.url;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "uploads",
+    format: async (req, file) => "png",
+    public_id: (req, file) => file.originalname.split(".")[0],
+  },
+});
 
-// Subir imagen a Cloudinary
-const postImage = async (file) => {
-  try {
-    if (!file) throw new Error("No se ha subido ninguna imagen");
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: "uploads",
-    });
-    return result.secure_url; // Devuelve la URL segura de la imagen
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
+const upload = multer({ storage });
 
-// Eliminar imagen de Cloudinary
-const deleteImage = async (id) => {
-  try {
-    if (!id) throw new Error("No se proporcionó un ID de imagen");
-    await cloudinary.uploader.destroy(id);
-    return { message: "Imagen eliminada correctamente" };
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
+// Exporta tanto upload como cloudinary
 module.exports = {
+  upload,
   cloudinary,
-  getImage,
-  postImage,
-  deleteImage,
 };
