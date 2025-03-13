@@ -1,13 +1,13 @@
 // src/middleware/upload.js
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const { cloudinary } = require("../helpers/cloudinary"); // Ahora cloudinary está definido
+const { cloudinary } = require("../helpers/cloudinary");
 
 const storage = new CloudinaryStorage({
-  cloudinary, // Esto funcionará correctamente
+  cloudinary,
   params: {
     folder: "uploads",
-    allowed_formats: ["jpg", "png", "jpeg", "webp"], // Formatos permitidos
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
   },
 });
 

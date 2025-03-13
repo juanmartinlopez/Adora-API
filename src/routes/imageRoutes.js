@@ -1,8 +1,8 @@
 //?-----------Imports-----------
 const { Router } = require("express");
 const { getImage, postImage, deleteImage } = require("../controllers/imageController");
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Configuración básica de Multer para almacenar archivos temporalmente
+const multer = require("multer");
+const upload = require("../middleware/upload"); // Esto usa DiskStorage por defecto
 
 const imageRouter = Router();
 
